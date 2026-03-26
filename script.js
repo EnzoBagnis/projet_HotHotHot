@@ -1,6 +1,56 @@
 // Connexion au WebSocket
 const socket = new WebSocket('wss://ws.hothothot.dog:9502');
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(error => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
+
+// Gestion de l'installation de la PWA
+let deferredPrompt;
+const installButton = document.getElementById('install-app');
+
+// Cacher le bouton par défaut
+if (installButton) {
+  installButton.style.display = 'none';
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Empêcher l'affichage automatique de l'invite
+  e.preventDefault();
+  // Stocker l'événement pour pouvoir le déclencher plus tard
+  deferredPrompt = e;
+  // Afficher le bouton d'installation
+  if (installButton) {
+    installButton.style.display = 'block';
+  }
+});
+
+if (installButton) {
+  installButton.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      // Afficher l'invite d'installation
+      deferredPrompt.prompt();
+
+      // Attendre que l'utilisateur réponde à l'invite
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`L'utilisateur a ${outcome === 'accepted' ? 'accepté' : 'refusé'} l'installation`);
+
+      // Réinitialiser deferredPrompt, car il ne peut être utilisé qu'une seule fois
+      deferredPrompt = null;
+      // Cacher le bouton après la décision
+      installButton.style.display = 'none';
+    }
+  });
+}
+
 // Évènement lors de l'ouverture de la connexion
 socket.onopen = () => {
     console.log("Connecté au serveur WebSocket");

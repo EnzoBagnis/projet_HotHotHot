@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <title>Températures en Temps Réel</title>
     <style>
@@ -31,6 +32,9 @@
     <div class="temp-value">-- °C</div>
     <div class="status">En attente...</div>
 </div>
+
+<button id="install-app" style="display: none;">Installer l'application</button>
+
 
 <script src="script.js"></script>
 </body>
