@@ -57,15 +57,17 @@ var WSController = (function () {
     _ws.addEventListener('open', function () {
       _retryDelay = MIN_DELAY;
       clearTimeout(_retryTimer);
-      AJAXController.stop();
       Model.setConnection('ws');
       try { console.log('[WS] open', WS_URL); } catch(e){}
-      _ws.send('getTemperature');
       _resetInactivityTimer();
+      try { _ws.send('getTemperature'); } catch(err) {
+        try { console.log('[WS] send error', err); } catch(e){}
+      }
     });
 
     _ws.addEventListener('message', function (e) {
       try { console.log('[WS] message', e.data); } catch(e){}
+      AJAXController.stop();
       _resetInactivityTimer();
       _parse(e.data);
     });

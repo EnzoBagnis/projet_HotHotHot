@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  AJAXController.start();
   WSController.init();
 
   Model.on('sensor:alert', function (data) {
