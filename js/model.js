@@ -39,7 +39,7 @@ var Model = (function () {
     var limits = THRESHOLDS[type];
 
     if (value < limits.min || value > limits.max) {
-      var reason = (value < limits.min) ? "Trop froid" : "Trop chaud";
+      var reason = (value < limits.min) ? "FAIT TARPIN FROID" : "FAIT TARPIN CHAUD";
       var alertObj = { ts: now.getTime(), type: type, value: value, reason: reason + " (" + value.toFixed(1) + "°C)" };
       _state.alerts.unshift(alertObj);
       if (_state.alerts.length > 50) _state.alerts.pop();
