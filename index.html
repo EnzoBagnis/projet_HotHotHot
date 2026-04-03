@@ -1,136 +1,41 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HotHotHot</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <title>Températures en Temps Réel</title>
+    <style>
+        .sensor-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .temp-value { font-size: 2em; font-weight: bold; color: #e74c3c; }
+        .status { font-size: 0.8em; color: gray; }
+    </style>
 </head>
 <body>
 
-  <nav class="top-nav" role="navigation" aria-label="Navigation principale">
-    <ul>
-      <a class="brand" href="#" id="nav-brand">HotHotHot</a>
-      <li><a href="#" id="nav-home" class="active" aria-current="page">Accueil</a></li>
-      <li><a href="#" id="nav-doc">Documentation</a></li>
-    </ul>
-  </nav>
+<h1>Données HotHotHot</h1>
 
-  <main id="page-home" class="page active" role="main">
+<div id="sensor-1" class="sensor-card">
+    <h3>Capteur Intérieur</h3>
+    <div class="temp-value">-- °C</div>
+    <div class="status">En attente...</div>
+</div>
 
+<div id="sensor-2" class="sensor-card">
+    <h3>Capteur Extérieur</h3>
+    <div class="temp-value">-- °C</div>
+    <div class="status">En attente...</div>
+</div>
 
-    <section class="hero">
-      <h1>HotHotHot</h1>
-      <p>Surveillance thermique en temps reel</p>
-      <div class="status-bar" role="status" aria-live="polite">
-        <span class="status-dot" id="conn-dot" aria-hidden="true"></span>
-        <span id="conn-label">Connexion en cours...</span>
-      </div>
-    </section>
-
-    <div class="tabs-wrapper">
-
-      <div class="tab-list" role="tablist">
-        <button class="tab-btn active" id="tbtn-realtime">Temps reel</button>
-        <button class="tab-btn" id="tbtn-history">Historique</button>
-        <button class="tab-btn" id="tbtn-alerts">
-          Alertes <span id="alert-badge" class="badge-count" style="display:none">0</span>
-        </button>
-      </div>
-
-      <div id="tab-alerts" class="tab-panel" role="tabpanel">
-        <h3>Journal des alertes</h3>
-        <div id="alerts-log" class="alerts-log-container">
-          <p style="text-align:center; color:#888;">Aucune alerte pour le moment.</p>
-        </div>
-      </div>
-
-      <div id="tab-realtime" class="tab-panel active" role="tabpanel" aria-labelledby="tbtn-realtime">
-        <div class="sensors-grid">
-
-          <article class="sensor-card" aria-label="Capteur exterieur" style="--glow-color: var(--brand-warm)">
-            <div class="sensor-label">Capteur exterieur</div>
-            <div class="sensor-temp" id="temp-ext" aria-live="polite">
-              <span id="val-ext">--</span><span class="sensor-unit">°C</span>
-            </div>
-            <div class="sensor-range">
-              <small>Min: <span id="min-ext">--</span>°C</small>
-              <small>Max: <span id="max-ext">--</span>°C</small>
-            </div>
-          </article>
-
-          <article class="sensor-card" aria-label="Capteur interieur" style="--glow-color: var(--brand-cool)">
-            <div class="sensor-label">Capteur interieur</div>
-            <div class="sensor-temp" id="temp-int" aria-live="polite">
-              <span id="val-int">--</span><span class="sensor-unit">°C</span>
-            </div>
-            <div class="sensor-range">
-              <small>Min: <span id="min-int">--</span>°C</small>
-              <small>Max: <span id="max-int">--</span>°C</small>
-            </div>
-          </article>
-
-        </div>
-        <p class="last-updated" aria-live="polite">Derniere mise a jour : <span id="last-time">--</span></p>
-      </div>
-
-      <div id="tab-history" class="tab-panel" role="tabpanel" aria-labelledby="tbtn-history">
-        <div class="history-graph-wrapper">
-          <svg id="history-graph" width="100%" height="240" viewBox="0 0 600 240" preserveAspectRatio="none" aria-hidden="false"></svg>
-          <div class="history-legend">
-            <span class="legend-item"><span class="legend-color" style="background:#ff9500"></span>Exterieur <strong id="legend-ext-value">--</strong></span>
-            <span class="legend-item"><span class="legend-color" style="background:#00b4d8"></span>Interieur <strong id="legend-int-value">--</strong></span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <main id="page-doc" class="page" role="main" aria-label="Documentation du projet">
-    <section class="doc-page">
-      <h1 class="doc-title">Documentation</h1>
-
-      <h2>Equipe et roles</h2>
-      <div class="team-grid">
-        <div class="team-card"><strong>Bagnis Enzo</strong><span>Lot 1</span></div>
-        <div class="team-card"><strong>Marcus William</strong><span>Lot 2</span></div>
-        <div class="team-card"><strong>Pibouleau Jean-Baptiste</strong><span>Lot 3</span></div>
-      </div>
-
-      <h2>Outils et organisation</h2>
-      <h3>Outils utilises</h3>
-      <div>
-        <span class="badge">Git / GitHub</span>
-        <span class="badge">PHPStorm</span>
-        <span class="badge">Pico CSS</span>
-        <span class="badge cool">WebSocket API</span>
-        <span class="badge cool">Fetch API</span>
-      </div>
-      <h3>Depot Git</h3>
-      <p><a href="https://github.com/EnzoBagnis/projet_HotHotHot" target="_blank" rel="noopener">https://github.com/EnzoBagnis/projet_HotHotHot</a></p>
-
-      <h2>Principales difficultes</h2>
-      <h3>1. Certificat SSL</h3>
-      <p>Une des difficultés présentes était que deux d'entre nous étaient sur Windows, et un dernier sur les PC de l'IUT : ils n'avaient pas accès à sudo, ce qui rendait impossible d'installer le certificat au niveau système pour que le navigateur le reconnaisse comme fiable. Sur Windows, la procédure est plus complexe que sur Linux.</p>
-      <h3>2. WebSocket et API inaccessible</h3>
-      <p>Très souvent, l'accès au WebSocket et à l'API n'était pas disponible, ce qui rendait les tests impossibles.</p>
-
-      <h2>Ce que nous changerions</h2>
-      <p>On verra a la fin du projet</p>
-
-    </section>
-  </main>
+<button id="install-app" style="display: none;">Installer l'application</button>
 
 
-  <script src="js/model.js"></script>
-  <script src="js/view.js"></script>
-  <script src="js/ws-controller.js"></script>
-  <script src="js/ajax-controller.js"></script>
-  <script src="js/router.js"></script>
-  <script src="js/tabs.js"></script>
-  <script src="js/app.js"></script>
-
+<script src="js/script.js"></script>
 </body>
 </html>
