@@ -25,7 +25,7 @@ var Model = (function () {
     var s = _state.sensors[type];
     var now = new Date();
 
-    if (s.updatedAt && now.getDate() !== s.updatedAt.getDate()) {
+    if (s.updatedAt && now.getDate() !== new Date(s.updatedAt).getDate()) {
       s.min = value;
       s.max = value;
     } else {
@@ -35,6 +35,15 @@ var Model = (function () {
 
     s.current = value;
     s.updatedAt = now;
+    try {
+      console.log('[Model] updateSensor', { type: type, value: value });
+    } catch (e) { }
+
+    var s = _state.sensors[type];
+    s.current = value;
+    if (s.min === null || value < s.min) s.min = value;
+    if (s.max === null || value > s.max) s.max = value;
+    s.updatedAt = new Date();
 
     if (!Array.isArray(s.history)) s.history = [];
     s.history.push({ ts: s.updatedAt.getTime(), value: value });

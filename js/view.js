@@ -35,11 +35,11 @@ var View = (function () {
     if (valEl) valEl.textContent = display;
 
     var minEl = document.getElementById('min-' + type);
-    var maxEl = document.getElementById('max-' + type);
-
     if (minEl) {
       minEl.textContent = (sensor.min !== null) ? sensor.min.toFixed(1) : '--';
     }
+
+    var maxEl = document.getElementById('max-' + type);
     if (maxEl) {
       maxEl.textContent = (sensor.max !== null) ? sensor.max.toFixed(1) : '--';
     }
