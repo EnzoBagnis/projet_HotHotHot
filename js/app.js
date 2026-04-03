@@ -27,6 +27,40 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  AJAXController.start();
   WSController.init();
 
+  Model.on('sensor:alert', function (data) {
+    var label = (data.type === 'ext') ? 'Extérieur' : 'Intérieur';
+    View.showPopup(label + " : " + data.value.toFixed(1) + "°C - " + data.reason);
+
+    View.updateAlertBadge(1);
+    View.renderAlertLog(Model.getAlerts());
+  });
+
+  document.getElementById('tbtn-alerts').addEventListener('click', function() {
+    View.renderAlertLog(Model.getAlerts());
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+
+    Model.on('sensor:updated', function (data) {
+      View.renderSensor(data.type, data.sensor);
+    });
+
+    Model.on('sensor:alert', function (data) {
+      View.showPopup(data.reason);
+      View.updateAlertBadge(1);
+      View.renderAlertLog(Model.getAlerts());
+    });
+
+    Model.on('connection:changed', function (data) {
+      View.renderConnection(data.status);
+    });
+
+    Router.init();
+    Tabs.init();
+    WSController.init();
+  });
+
 });
+

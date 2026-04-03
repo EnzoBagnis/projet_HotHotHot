@@ -34,6 +34,16 @@ var View = (function () {
     }
     if (valEl) valEl.textContent = display;
 
+    var minEl = document.getElementById('min-' + type);
+    if (minEl) {
+      minEl.textContent = (sensor.min !== null) ? sensor.min.toFixed(1) : '--';
+    }
+
+    var maxEl = document.getElementById('max-' + type);
+    if (maxEl) {
+      maxEl.textContent = (sensor.max !== null) ? sensor.max.toFixed(1) : '--';
+    }
+
     var tempEl = document.getElementById('temp-' + type);
     if (tempEl) {
       tempEl.style.color = color;
@@ -42,7 +52,10 @@ var View = (function () {
 
     if (sensor && sensor.updatedAt) {
       var timeEl = document.getElementById('last-time');
-      if (timeEl) timeEl.textContent = (sensor.updatedAt instanceof Date) ? sensor.updatedAt.toLocaleTimeString('fr-FR') : new Date(sensor.updatedAt).toLocaleTimeString('fr-FR');
+      if (timeEl) {
+        var dateObj = (sensor.updatedAt instanceof Date) ? sensor.updatedAt : new Date(sensor.updatedAt);
+        timeEl.textContent = dateObj.toLocaleTimeString('fr-FR');
+      }
     }
   }
 
@@ -141,11 +154,56 @@ var View = (function () {
     if (dot)   dot.className = 'status-dot ' + info.cls;
     if (label) label.textContent = info.label;
   }
+  function showPopup(message) {
+    var container = document.getElementById('alert-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'alert-container';
+      document.body.appendChild(container);
+    }
+    var toast = document.createElement('div');
+    toast.className = 'alert-toast';
+    toast.innerHTML = '<strong>⚠️ Alerte :</strong> ' + message;
+    container.appendChild(toast);
+    setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 500); }, 5000);
+  }
+
+  function renderAlertLog(alerts) {
+    var container = document.getElementById('alerts-log');
+    if (!container) return;
+    var html = '<table class="striped"><thead><tr><th>Heure</th><th>Capteur</th><th>Problème</th></tr></thead><tbody>';
+    alerts.forEach(function(a) {
+      var time = new Date(a.ts).toLocaleTimeString('fr-FR');
+      html += '<tr><td>'+time+'</td><td>'+(a.type==='ext'?'Ext':'Int')+'</td><td>'+a.reason+'</td></tr>';
+    });
+    container.innerHTML = html + '</tbody></table>';
+  }
+
+  function updateAlertBadge(count) {
+    var badge = document.getElementById('alert-badge');
+    if (badge) {
+      var current = parseInt(badge.textContent || "0");
+      badge.textContent = current + count;
+      badge.style.display = 'inline-block';
+    }
+  }
+
+
+
+  function clearAlertBadge() {
+    _unreadAlerts = 0;
+    updateAlertBadge(0);
+  }
 
   return {
     renderSensor:     renderSensor,
     renderConnection: renderConnection,
-    renderHistory:    renderHistory
+    renderHistory:    renderHistory,
+    showPopup:        showPopup,        // <--- Doit être présent
+    renderAlertLog:   renderAlertLog,   // <--- Doit être présent
+    updateAlertBadge: updateAlertBadge  // <--- Doit être présent
   };
+
+
 
 })();
