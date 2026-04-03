@@ -161,17 +161,38 @@ var View = (function () {
       container.id = 'alert-container';
       document.body.appendChild(container);
     }
-
     var toast = document.createElement('div');
     toast.className = 'alert-toast';
-    toast.innerHTML = '<strong>⚠️ Alerte Variation :</strong> ' + message;
-
+    toast.innerHTML = '<strong>⚠️ Alerte :</strong> ' + message;
     container.appendChild(toast);
+    setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 500); }, 5000);
+  }
 
-    setTimeout(function() {
-      toast.style.opacity = '0';
-      setTimeout(function() { toast.remove(); }, 500);
-    }, 5000);
+  function renderAlertLog(alerts) {
+    var container = document.getElementById('alerts-log');
+    if (!container) return;
+    var html = '<table class="striped"><thead><tr><th>Heure</th><th>Capteur</th><th>Problème</th></tr></thead><tbody>';
+    alerts.forEach(function(a) {
+      var time = new Date(a.ts).toLocaleTimeString('fr-FR');
+      html += '<tr><td>'+time+'</td><td>'+(a.type==='ext'?'Ext':'Int')+'</td><td>'+a.reason+'</td></tr>';
+    });
+    container.innerHTML = html + '</tbody></table>';
+  }
+
+  function updateAlertBadge(count) {
+    var badge = document.getElementById('alert-badge');
+    if (badge) {
+      var current = parseInt(badge.textContent || "0");
+      badge.textContent = current + count;
+      badge.style.display = 'inline-block';
+    }
+  }
+
+
+
+  function clearAlertBadge() {
+    _unreadAlerts = 0;
+    updateAlertBadge(0);
   }
 
   return {
@@ -182,49 +203,7 @@ var View = (function () {
     renderAlertLog:   renderAlertLog,   // <--- Doit être présent
     updateAlertBadge: updateAlertBadge  // <--- Doit être présent
   };
-  function renderAlertLog(alerts) {
-    var container = document.getElementById('alerts-log');
-    if (!container) return;
 
-    if (alerts.length === 0) {
-      container.innerHTML = '<p>Aucune alerte.</p>';
-      return;
-    }
-
-    var html = '<table class="striped">';
-    html += '<thead><tr><th>Heure</th><th>Capteur</th><th>Valeur</th><th>Problème</th></tr></thead><tbody>';
-
-    alerts.forEach(function(a) {
-      var time = new Date(a.ts).toLocaleTimeString('fr-FR');
-      var label = (a.type === 'ext') ? 'Extérieur' : 'Intérieur';
-      var color = (a.value < 10) ? '#4361ee' : '#ff4d1c'; // froid=bleu, chaud=rouge
-
-      html += '<tr>';
-      html += '<td>' + time + '</td>';
-      html += '<td>' + label + '</td>';
-      html += '<td style="color:' + color + '; font-weight:bold">' + a.value.toFixed(1) + '°C</td>';
-      html += '<td>' + a.reason + '</td>';
-      html += '</tr>';
-    });
-
-    html += '</tbody></table>';
-    container.innerHTML = html;
-  }
-
-  var _unreadAlerts = 0;
-  function updateAlertBadge(increment) {
-    _unreadAlerts += increment;
-    var badge = document.getElementById('alert-badge');
-    if (badge) {
-      badge.textContent = _unreadAlerts;
-      badge.style.display = (_unreadAlerts > 0) ? 'inline-block' : 'none';
-    }
-  }
-
-  function clearAlertBadge() {
-    _unreadAlerts = 0;
-    updateAlertBadge(0);
-  }
 
 
 })();

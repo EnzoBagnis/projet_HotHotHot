@@ -40,6 +40,26 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('tbtn-alerts').addEventListener('click', function() {
     View.renderAlertLog(Model.getAlerts());
   });
+  document.addEventListener('DOMContentLoaded', function () {
+
+    Model.on('sensor:updated', function (data) {
+      View.renderSensor(data.type, data.sensor);
+    });
+
+    Model.on('sensor:alert', function (data) {
+      View.showPopup(data.reason);
+      View.updateAlertBadge(1);
+      View.renderAlertLog(Model.getAlerts());
+    });
+
+    Model.on('connection:changed', function (data) {
+      View.renderConnection(data.status);
+    });
+
+    Router.init();
+    Tabs.init();
+    WSController.init();
+  });
 
 });
 
