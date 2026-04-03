@@ -34,6 +34,16 @@ var View = (function () {
     }
     if (valEl) valEl.textContent = display;
 
+    var minEl = document.getElementById('min-' + type);
+    var maxEl = document.getElementById('max-' + type);
+
+    if (minEl) {
+      minEl.textContent = (sensor.min !== null) ? sensor.min.toFixed(1) : '--';
+    }
+    if (maxEl) {
+      maxEl.textContent = (sensor.max !== null) ? sensor.max.toFixed(1) : '--';
+    }
+
     var tempEl = document.getElementById('temp-' + type);
     if (tempEl) {
       tempEl.style.color = color;
@@ -42,7 +52,10 @@ var View = (function () {
 
     if (sensor && sensor.updatedAt) {
       var timeEl = document.getElementById('last-time');
-      if (timeEl) timeEl.textContent = (sensor.updatedAt instanceof Date) ? sensor.updatedAt.toLocaleTimeString('fr-FR') : new Date(sensor.updatedAt).toLocaleTimeString('fr-FR');
+      if (timeEl) {
+        var dateObj = (sensor.updatedAt instanceof Date) ? sensor.updatedAt : new Date(sensor.updatedAt);
+        timeEl.textContent = dateObj.toLocaleTimeString('fr-FR');
+      }
     }
   }
 

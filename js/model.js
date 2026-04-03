@@ -22,15 +22,19 @@ var Model = (function () {
   }
 
   function updateSensor(type, value) {
-    try {
-      console.log('[Model] updateSensor', { type: type, value: value });
-    } catch (e) { }
-
     var s = _state.sensors[type];
+    var now = new Date();
+
+    if (s.updatedAt && now.getDate() !== s.updatedAt.getDate()) {
+      s.min = value;
+      s.max = value;
+    } else {
+      if (s.min === null || value < s.min) s.min = value;
+      if (s.max === null || value > s.max) s.max = value;
+    }
+
     s.current = value;
-    if (s.min === null || value < s.min) s.min = value;
-    if (s.max === null || value > s.max) s.max = value;
-    s.updatedAt = new Date();
+    s.updatedAt = now;
 
     if (!Array.isArray(s.history)) s.history = [];
     s.history.push({ ts: s.updatedAt.getTime(), value: value });
