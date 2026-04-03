@@ -30,10 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
   WSController.init();
 
   Model.on('sensor:alert', function (data) {
-    var nomCapteur = (data.type === 'ext') ? 'Extérieur' : 'Intérieur';
-    var msg = 'Le capteur ' + nomCapteur + ' a varié de ' + data.diff.toFixed(1) + '°C brusquement ! (' + data.oldVal.toFixed(1) + '°C → ' + data.newVal.toFixed(1) + '°C)';
+    var label = (data.type === 'ext') ? 'Extérieur' : 'Intérieur';
+    View.showPopup(label + " : " + data.value.toFixed(1) + "°C - " + data.reason);
 
-    View.showPopup(msg);
+    View.updateAlertBadge(1);
+    View.renderAlertLog(Model.getAlerts());
+  });
+
+  document.getElementById('tbtn-alerts').addEventListener('click', function() {
+    View.renderAlertLog(Model.getAlerts());
   });
 
 });

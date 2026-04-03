@@ -19,6 +19,7 @@
 
   <main id="page-home" class="page active" role="main">
 
+
     <section class="hero">
       <h1>HotHotHot</h1>
       <p>Surveillance thermique en temps reel</p>
@@ -30,15 +31,20 @@
 
     <div class="tabs-wrapper">
 
-      <div class="tab-list" role="tablist" aria-label="Sections">
-        <button class="tab-btn active" role="tab" aria-selected="true"
-                aria-controls="tab-realtime" id="tbtn-realtime">
-          Temps reel
+      <div class="tab-list" role="tablist">
+        <button class="tab-btn active" id="tbtn-realtime">Temps reel</button>
+        <button class="tab-btn" id="tbtn-history">Historique</button>
+        <button class="tab-btn" id="tbtn-alerts">
+          Alertes <span id="alert-badge" class="badge-count" style="display:none">0</span>
         </button>
-        <button class="tab-btn" role="tab" aria-selected="false"
-                aria-controls="tab-history" id="tbtn-history">
-          Historique
-        </button>
+      </div>
+
+      <div id="tab-alerts" class="tab-panel" role="tabpanel">
+        <h3>Journal des alertes</h3>
+        <div id="alerts-log" class="alerts-log-container">
+          <p style="text-align:center; color:#888;">Aucune alerte pour le moment.</p>
+        </div>
+        <button class="outline secondary" onclick="View.clearAlertBadge()">Marquer comme lu</button>
       </div>
 
       <div id="tab-realtime" class="tab-panel active" role="tabpanel" aria-labelledby="tbtn-realtime">
