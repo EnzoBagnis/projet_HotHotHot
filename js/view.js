@@ -154,6 +154,32 @@ var View = (function () {
     if (dot)   dot.className = 'status-dot ' + info.cls;
     if (label) label.textContent = info.label;
   }
+  function showPopup(message) {
+    var container = document.getElementById('alert-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'alert-container';
+      document.body.appendChild(container);
+    }
+
+    var toast = document.createElement('div');
+    toast.className = 'alert-toast';
+    toast.innerHTML = '<strong>⚠️ Alerte Variation :</strong> ' + message;
+
+    container.appendChild(toast);
+
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      setTimeout(function() { toast.remove(); }, 500);
+    }, 5000);
+  }
+
+  return {
+    renderSensor: renderSensor,
+    renderConnection: renderConnection,
+    renderHistory: renderHistory,
+    showPopup: showPopup // <--- ICI
+  };
 
   return {
     renderSensor:     renderSensor,

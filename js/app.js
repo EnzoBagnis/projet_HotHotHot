@@ -29,4 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   WSController.init();
 
+  Model.on('sensor:alert', function (data) {
+    var nomCapteur = (data.type === 'ext') ? 'Extérieur' : 'Intérieur';
+    var msg = 'Le capteur ' + nomCapteur + ' a varié de ' + data.diff.toFixed(1) + '°C brusquement ! (' + data.oldVal.toFixed(1) + '°C → ' + data.newVal.toFixed(1) + '°C)';
+
+    View.showPopup(msg);
+  });
+
 });
+

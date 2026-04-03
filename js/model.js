@@ -1,13 +1,7 @@
 var Model = (function () {
 
   var HISTORY_LIMIT = 288;
-  var _state = {
-    sensors: {
-      ext: { current: null, min: null, max: null, history: [] },
-      int: { current: null, min: null, max: null, history: [] }
-    },
-    connection: 'connecting'
-  };
+  ;
 
   var _listeners = {};
 
@@ -21,13 +15,31 @@ var Model = (function () {
     _listeners[event].forEach(function (cb) { cb(data); });
   }
 
+  var _state = {
+    sensors: {
+      ext: { current: null, previous: null, min: null, max: null, history: [] },
+      int: { current: null, previous: null, min: null, max: null, history: [] }
+    },
+  };
+
   function updateSensor(type, value) {
     var s = _state.sensors[type];
     var now = new Date();
 
+    var SEUIL_ALERTE = 5;
+    if (s.current !== null) {
+      var difference = Math.abs(value - s.current);
+      if (difference >= SEUIL_ALERTE) {
+        emit('sensor:alert', {
+          type: type,
+          oldVal: s.current,
+          newVal: value,
+          diff: difference
+        });
+      }
+    }
     if (s.updatedAt && now.getDate() !== new Date(s.updatedAt).getDate()) {
-      s.min = value;
-      s.max = value;
+      s.min = value; s.max = value;
     } else {
       if (s.min === null || value < s.min) s.min = value;
       if (s.max === null || value > s.max) s.max = value;

@@ -23,6 +23,33 @@
   font-size: 0.8rem;
 }
 
+#alert-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alert-toast {
+  background: #ff4d1c;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: slideIn 0.3s ease-out;
+  transition: opacity 0.5s;
+  max-width: 300px;
+  font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 * {
   box-sizing: border-box;
 }
