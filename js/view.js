@@ -175,16 +175,12 @@ var View = (function () {
   }
 
   return {
-    renderSensor: renderSensor,
-    renderConnection: renderConnection,
-    renderHistory: renderHistory,
-    showPopup: showPopup // <--- ICI
-  };
-
-  return {
     renderSensor:     renderSensor,
     renderConnection: renderConnection,
-    renderHistory:    renderHistory
+    renderHistory:    renderHistory,
+    showPopup:        showPopup,        // <--- Doit être présent
+    renderAlertLog:   renderAlertLog,   // <--- Doit être présent
+    updateAlertBadge: updateAlertBadge  // <--- Doit être présent
   };
   function renderAlertLog(alerts) {
     var container = document.getElementById('alerts-log');
